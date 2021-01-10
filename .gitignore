@@ -1,4 +1,4 @@
-Commandline.iml
+CommandLineInterface.iml
 target/*
 src/test/*
 .idea/*

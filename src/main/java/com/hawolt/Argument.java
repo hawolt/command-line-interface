@@ -1,98 +1,59 @@
 package com.hawolt;
 
-/**
- * Created by: Niklas
- * Date: 25.03.2020
- * Time: 19:53
- */
 public class Argument {
-    private String description, max, min;
-    private boolean required, argument, once, untilNext;
-    private int total;
 
-    private String[] values;
+    private String shortName, longName, description, value;
+    private boolean mandatory, unique, flag;
 
-    public Argument(String max, String min, String description, boolean required, boolean argument) {
-        this(max, min, description, required, true, false, argument, argument ? 1 : 0);
+    public static Argument create(String shortName, String longName, String description, boolean mandatory, boolean unique, boolean flag) {
+        return new Argument(shortName, longName, description, mandatory, unique, flag);
     }
 
-    public Argument(String max, String min, String description, boolean required, int total) {
-        this(max, min, description, required, true, false, true, total);
-    }
-
-    public Argument(String max, String min, String description, boolean required, boolean once, boolean untilNext) {
-        this(max, min, description, required, once, untilNext, true, untilNext ? -1 : 1);
-    }
-
-    private Argument(String max, String min, String description, boolean required, boolean once, boolean untilNext, boolean argument, int total) {
+    private Argument(String shortName, String longName, String description, boolean mandatory, boolean unique, boolean flag) {
+        this.shortName = shortName;
+        this.longName = longName;
         this.description = description;
-        this.required = required;
-        this.argument = argument;
-        this.untilNext = untilNext;
-        this.total = total;
-        this.once = once;
-        this.max = max;
-        this.min = min;
+        this.mandatory = mandatory;
+        this.unique = unique;
+        this.flag = flag;
     }
 
-    @Override
-    public String toString() {
-        return String.format("%s[%s]", max, values == null ? "" : String.join(";", values));
+    public String getShortName() {
+        return shortName;
+    }
+
+    public String getLongName() {
+        return longName;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public boolean isArgument() {
-        return argument;
+    public boolean isMandatory() {
+        return mandatory;
     }
 
-    public boolean isUntilNext() {
-        return untilNext;
+    public boolean isUnique() {
+        return unique;
     }
 
-    public boolean isRequired() {
-        return required;
-    }
-
-    public String getMax() {
-        return max;
-    }
-
-    public String getMin() {
-        return min;
-    }
-
-    public boolean isOnce() {
-        return once;
-    }
-
-    public int getTotal() {
-        return total;
-    }
-
-    public String[] getValues() {
-        return values;
-    }
-
-    public void setValues(String[] values) {
-        this.values = values;
-    }
-
-    public String getValue(int i) {
-        return values[i];
+    public boolean isFlag() {
+        return flag;
     }
 
     public String getValue() {
-        return values[0];
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
     }
 
     @Override
     public int hashCode() {
-        int strings = description.hashCode() + max.hashCode() + min.hashCode();
-        if (values != null) for (String string : values) strings += string.hashCode();
-        int booleans = (required ? 31 : 1) * (argument ? 37 : 1) * (once ? 41 : 1);
-        return 7 * (strings + booleans + total);
+        int strings = shortName.hashCode() + longName.hashCode() + description.hashCode() + (value != null ? value.hashCode() : 0);
+        int booleans = (mandatory ? 31 : 1) * (unique ? 37 : 1) * (flag ? 41 : 1);
+        return 7 * (strings + booleans);
     }
 }
